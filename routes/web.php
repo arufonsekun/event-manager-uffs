@@ -18,4 +18,6 @@ Route::get('/', function() {
     return  view('home');
 });
 
+Route::resource('event', 'EventController');
+
 // Route::get('/', 'HomeController@index')->name('home');
