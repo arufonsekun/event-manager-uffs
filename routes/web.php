@@ -22,4 +22,6 @@ Route::get('/editor', function() {
     return view('editor');
 });
 
+Route::resource('event', 'EventController');
+
 // Route::get('/', 'HomeController@index')->name('home');
