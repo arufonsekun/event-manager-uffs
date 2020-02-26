@@ -39,11 +39,14 @@ class EventController extends Controller
     {
         $validatedEvent = $request->validate([
             'name' => 'required',
-            'date' => 'required|before:today',
+            'start_date' => 'required|after:today',
+            'end_date' => 'required|after:today',
             'description' => 'required',
             'place' => 'required',
             'sections' => 'json|nullable'
         ]);
+
+        dd($validatedEvent);
 
         $eventFields = $request->all();
 
@@ -101,5 +104,13 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
         //
+    }
+
+    public function messages()
+    {
+        return [
+            'start_date.required' => 'O campo data inicial é obrigatório.',
+            'end_date.required' => 'O campo data final é obrigatório.'
+        ];
     }
 }
