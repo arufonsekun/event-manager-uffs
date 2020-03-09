@@ -42,7 +42,7 @@
                 <div class="collapse navbar-collapse" id="navbar-user-section">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Sair</a>
+                            <a class="nav-link" href="{{ route('logout') }}">Sair</a>
                         </li>
                     </ul>
                 </div>

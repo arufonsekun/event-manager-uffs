@@ -6,8 +6,8 @@
         @create="createEvent"
     >
         <div class="form-group">
-            <label for="eventName">Nome do evento</label>
-            <input type="text" name="eventName" v-model="eventName" id="eventName" class="form-control">
+            <label for="name">Nome do evento</label>
+            <input type="text" name="name" v-model="name" id="name" class="form-control">
         </div>
 
         <div class="form-group">
@@ -21,14 +21,23 @@
         </div>
 
         <div class="form-group">
-            <label for="eventDateStart">Data de início do evento</label>
-            <input type="date" name="eventDateStart" v-model="dateStart" id="eventDateStart" class="form-control">
+            <label for="eventStartDate">Data de início do evento</label>
+            <input type="date" name="eventStartDate" v-model="startDate" id="eventStartDate" class="form-control">
         </div>
 
         <div class="form-group">
-            <label for="eventDateEnd">Data de térmimo do evento</label>
-            <input type="date" name="eventDateEnd" v-model="dateEnd" id="eventDateEnd" class="form-control">
+            <label for="eventEndDate">Data de térmimo do evento</label>
+            <input type="date" name="eventEndDate" v-model="endDate" id="eventEndDate" class="form-control">
         </div>
+
+        <div :if="invalid">
+            <ol>
+                <li :for="error in errors">
+                    {{ error[0] }}
+                </li>
+            </ol>
+        </div>
+
     </base-modal>
 </template>
 
@@ -36,28 +45,43 @@
 export default {
     data: function() {
         return {
-            eventName: '',
+            name: '',
             place: '',
             description: '',
-            dateStart: '',
-            dateEnd: '',
+            startDate: '',
+            endDate: '',
+            invalid: false,
+            error: '',
+            errors : []
         }
     },
-    
     methods: {
         async createEvent() {
             let data = {
-                'eventName': this.eventName,
+                'name': this.eventName,
                 'place': this.place,
                 'description': this.description,
-                'dateStart': this.dateStart,
-                'dateEnd': this.dateEnd,
+                'startDate': this.startDate,
+                'endDate': this.endDate
             }
 
             console.log(data);
-            // await window.axios.post('/api/event', data);
 
-            // window.location.replace('/editor');
+            var response = window.axios.post('/event', data);
+            
+            response.then((res) => {
+                console.log(res.data);
+            })
+            .catch((err) => {
+                
+                err.response.data.errors.map((key) => {
+                    console.log(key);
+                });
+
+                this.errors = err.response.data.errors;
+            });
+            
+            
         }
     }
 }

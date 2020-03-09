@@ -39,7 +39,7 @@ class LoginController extends Controller
         $user = $this->getOrCreateUser($userData);
 
         Auth::login($user);
-        return redirect()->intended('home');
+        return redirect()->intended('/');
     }
 
     private function getOrCreateUser($data)
