@@ -29,7 +29,7 @@
                                 </ul>
                             </div>
                         @endif
-                        <button class="btn btn-primary">ENTRAR</button>
+                        <button class="card__btn">ENTRAR</button>
                         <br>
                         <a href="https://id.uffs.edu.br/id/XUI/?realm=/#forgotUsername/" target="_blank" class="text-primary"> Não sabe seu IdUFFS? </a>
                         <br>
