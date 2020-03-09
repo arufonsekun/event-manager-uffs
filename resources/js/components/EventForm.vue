@@ -11,31 +11,33 @@
         </div>
 
         <div class="form-group">
-            <label for="eventPlace">Local do evento</label>
-            <input type="text" name="eventPlace" v-model="place" id="eventPlace" class="form-control">
+            <label for="place">Local do evento</label>
+            <input type="text" name="place" v-model="place" id="place" class="form-control">
         </div>
 
         <div class="form-group">
-            <label for="eventDescription">Breve descrição</label>
-            <textarea name="eventDescription" v-model="description" id="eventDescription" class="form-control" rows="3"></textarea>
+            <label for="description">Breve descrição</label>
+            <textarea name="description" v-model="description" id="description" class="form-control" rows="3"></textarea>
         </div>
 
         <div class="form-group">
-            <label for="eventStartDate">Data de início do evento</label>
-            <input type="date" name="eventStartDate" v-model="startDate" id="eventStartDate" class="form-control">
+            <label for="startDate">Data de início do evento</label>
+            <input type="date" name="startDate" v-model="startDate" id="startDate" class="form-control">
         </div>
 
         <div class="form-group">
-            <label for="eventEndDate">Data de térmimo do evento</label>
-            <input type="date" name="eventEndDate" v-model="endDate" id="eventEndDate" class="form-control">
+            <label for="endDate">Data de térmimo do evento</label>
+            <input type="date" name="endDate" v-model="endDate" id="endDate" class="form-control">
         </div>
 
-        <div :if="invalid">
-            <ol>
-                <li :for="error in errors">
-                    {{ error[0] }}
-                </li>
-            </ol>
+        <div v-if="invalid">
+            <div class="alert alert-danger">
+                <ol>
+                    <li v-for="error in errors">
+                        {{ error[0] }}
+                    </li>
+                </ol>
+            </div>
         </div>
 
     </base-modal>
@@ -51,34 +53,35 @@ export default {
             startDate: '',
             endDate: '',
             invalid: false,
-            error: '',
-            errors : []
+            errors : {
+                '' : {}
+            }
         }
     },
     methods: {
         async createEvent() {
             let data = {
-                'name': this.eventName,
-                'place': this.place,
-                'description': this.description,
-                'startDate': this.startDate,
-                'endDate': this.endDate
+                name: this.name,
+                place: this.place,
+                description: this.description,
+                start_date: this.startDate,
+                end_date: this.endDate
             }
 
             console.log(data);
 
             var response = window.axios.post('/event', data);
             
-            response.then((res) => {
-                console.log(res.data);
-            })
-            .catch((err) => {
-                
-                err.response.data.errors.map((key) => {
-                    console.log(key);
-                });
+            response.then(res => {
 
-                this.errors = err.response.data.errors;
+                console.log(res.data);
+
+            })
+            .catch(err => {
+               
+               this.errors = err.response.data.errors;
+               this.invalid = true;
+
             });
             
             

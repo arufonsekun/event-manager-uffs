@@ -40,20 +40,20 @@ class EventController extends Controller
         $rules = [
             'name' => 'required',
             'start_date' => 'required|before:today',
-            'end_date' => 'required|before:start_date',
+            'end_date' => 'required|before:today',
             'description' => 'required',
             'place' => 'required',
             'sections' => 'json|nullable'
         ];
 
         $customMessages = [
-            'name.required' => 'O nome do evento é um campo obrigatório',
-            'start_date.required' => 'A data inicial é obrigatória',
-            'end_date.required' => 'A data final é obrigatória',
-            'description.required' => 'A descrição é obrigatória',
-            'place.required' => 'O campo local do evento é obrigatório',
-            'start_date' => 'A data inicial é inválida',
-            'end_date' => 'A data final é inválida'
+            'name.required' => 'O nome do evento é um campo obrigatório.',
+            'start_date.required' => 'A data inicial é obrigatória.',
+            'end_date.required' => 'A data final é obrigatória.',
+            'description.required' => 'A descrição é obrigatória.',
+            'place.required' => 'O campo local do evento é obrigatório.',
+            'start_date.before:today' => 'A data inicial é inválida.',
+            'end_date.before:start_date' => 'A data final é inválida.'
         ];
 
         $validatedEvent = $request->validate($rules, $customMessages);
