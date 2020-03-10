@@ -22,21 +22,29 @@
 
         <div class="form-group">
             <label for="startDate">Data de início do evento</label>
-            <input type="date" name="startDate" v-model="startDate" id="startDate" class="form-control">
+            <datepicker :language="pt" :format="dateFormat" name="startDate" v-model="startDate" :bootstrap-styling="true"></datepicker>
+            <!--<input type="date" name="startDate" v-model="startDate" id="startDate" class="form-control">-->
         </div>
 
         <div class="form-group">
             <label for="endDate">Data de térmimo do evento</label>
-            <input type="date" name="endDate" v-model="endDate" id="endDate" class="form-control">
+            <datepicker :language="pt" :format="dateFormat" name="endDate" v-model="endDate" :bootstrap-styling="true"></datepicker>
+            <!--<input type="date" name="endDate" v-model="endDate" id="endDate" class="form-control">-->
         </div>
 
-        <div v-if="invalid">
+        <div v-if="error">
             <div class="alert alert-danger">
                 <ol>
-                    <li v-for="error in errors">
+                    <li v-for="error in response">
                         {{ error[0] }}
                     </li>
                 </ol>
+            </div>
+        </div>
+
+        <div v-if="success">
+            <div class="alert alert-success">
+                {{ response.message }}
             </div>
         </div>
 
@@ -44,6 +52,11 @@
 </template>
 
 <script>
+
+import Datepicker from 'vuejs-datepicker';
+import ptBR from 'vuejs-datepicker/dist/locale';
+import moment from 'moment';
+
 export default {
     data: function() {
         return {
@@ -52,10 +65,10 @@ export default {
             description: '',
             startDate: '',
             endDate: '',
-            invalid: false,
-            errors : {
-                '' : {}
-            }
+            error: false,
+            success: false,
+            response : {},
+            pt : ptBR
         }
     },
     methods: {
@@ -68,24 +81,33 @@ export default {
                 end_date: this.endDate
             }
 
-            console.log(data);
-
             var response = window.axios.post('/event', data);
             
             response.then(res => {
 
-                console.log(res.data);
+                this.response = res.data;
+                this.error = false;
+                this.success = true;
+
+                setTimeout(() => {
+                    window.location.href = this.response.route;
+                }, 2000);
 
             })
             .catch(err => {
                
-               this.errors = err.response.data.errors;
-               this.invalid = true;
+               this.response = err.response.data.errors;
+               this.error = true;
+               this.success = false;
 
             });
-            
-            
+        },
+        dateFormat(date) {
+            return moment(date).format('DD/MM/YYYY');
         }
+    },
+    components: {
+        Datepicker
     }
 }
 </script>

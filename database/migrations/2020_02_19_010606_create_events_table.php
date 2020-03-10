@@ -20,7 +20,7 @@ class CreateEventsTable extends Migration
             $table->date('end_date');
             $table->text('description');
             $table->string('place', 100);
-            $table->json('sections');
+            $table->json('sections')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

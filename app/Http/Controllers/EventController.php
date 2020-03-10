@@ -39,8 +39,8 @@ class EventController extends Controller
     {
         $rules = [
             'name' => 'required',
-            'start_date' => 'required|before:today',
-            'end_date' => 'required|before:today',
+            'start_date' => 'required|after:today',
+            'end_date' => 'required|after:today',
             'description' => 'required',
             'place' => 'required',
             'sections' => 'json|nullable'
@@ -52,20 +52,21 @@ class EventController extends Controller
             'end_date.required' => 'A data final é obrigatória.',
             'description.required' => 'A descrição é obrigatória.',
             'place.required' => 'O campo local do evento é obrigatório.',
-            'start_date.before:today' => 'A data inicial é inválida.',
-            'end_date.before:start_date' => 'A data final é inválida.'
+            'start_date.after' => 'A data inicial é inválida.',
+            'end_date.after' => 'A data final é inválida.'
         ];
 
         $validatedEvent = $request->validate($rules, $customMessages);
 
         $eventFields = $request->all();
 
+        $eventFields['start_date'] = date("Y-m-d", strtotime($eventFields['start_date']));
+        $eventFields['end_date'] = date("Y-m-d", strtotime($eventFields['end_date']));
         $event = Event::create($eventFields);
         
         $response = [
             'message' => 'Evento foi criado com sucesso!',
-            'route' => str_replace($edit, 'id', $event->id),
-            'method' => 'GET'
+            'route' => str_replace('id', $event->id, $this->edit)
         ];
 
         return response()->json($response, 201);
